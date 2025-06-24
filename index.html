@@ -4,13 +4,284 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gen Z Dictionary 💀</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>:root {
+    /* Dark Mode Colors */
+    --dark-bg: #121212;
+    --card-bg: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+
+    /* Light Mode Colors */
+    --light-bg: #f4f4f8;
+    --light-card-bg: #ffffff;
+    --light-text-primary: #2c2c2c;
+    --light-text-secondary: #6c6c6c;
+    --light-border: #e0e0e6;
+
+    /* Accent Colors */
+    --neon-pink: #ff6bff;
+    --vapor-blue: #00f5ff;
+    --soft-gradient: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+}
+
+body {
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode {
+    background: var(--light-bg);
+    color: var(--light-text-primary);
+}
+
+/* Intro Animation */
+#intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    opacity: 1; /* Explicitly set initial opacity */
+    transition: opacity 0.5s ease, visibility 0.5s ease; /* Add visibility transition */
+    visibility: visible;
+}
+#sort-toggle {
+    padding: 8px 12px;
+    background: red;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.search-loading {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-color);
+    font-size: 1.1em;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+}
+
+.suggestions {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--accent-color);
+    font-style: italic;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2em;
+    color: var(--text-color);
+}
+/* Add this to ensure children inherit opacity */
+#intro .logo,
+#intro .app-name {
+    transition: inherit; /* Inherit parent's transition */
+}
+
+body.light-mode #intro {
+    background: var(--light-bg);
+}
+
+.logo {
+    font-size: 80px;
+    animation: float 2s infinite alternate;
+}
+
+.app-name {
+    background: var(--soft-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 3rem;
+    margin: 0;
+    animation: fadeIn 1.5s;
+}
+
+
+/* Main App */
+#app {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    background: var(--soft-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.search-bar {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+body.light-mode .search-bar {
+    background: var(--light-border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    width: 100%;
+    font-size: 1rem;
+    outline: none;
+}
+
+body.light-mode .search-bar input {
+    color: var(--light-text-primary);
+}
+
+.word-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--neon-pink);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.light-mode .word-card {
+    background: var(--light-card-bg);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-left-color: #6a11cb;
+}
+
+.word {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: var(--vapor-blue);
+    margin-bottom: 5px;
+}
+
+body.light-mode .word {
+    color: #2575fc;
+}
+
+.meaning {
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+
+body.light-mode .meaning {
+    color: var(--light-text-secondary);
+}
+
+.example {
+    font-style: italic;
+    color: #aaa;
+    background: #252525;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+body.light-mode .example {
+    background: var(--light-border);
+    color: var(--light-text-secondary);
+}
+
+.emoji-reactions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.emoji-btn {
+    background: #333;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+body.light-mode .emoji-btn {
+    background: var(--light-border);
+    color: var(--light-text-primary);
+}
+
+.emoji-btn:hover {
+    transform: scale(1.15);
+    background: #444;
+}
+
+body.light-mode .emoji-btn:hover {
+    background: #e0e0e6;
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+body.light-mode #theme-toggle {
+    color: var(--light-text-primary);
+}
+
+#theme-toggle:hover {
+    transform: rotate(180deg);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}</style>
 </head>
 <body>
     <!-- Intro Animation -->
     <div id="intro">
         <div class="logo">💀</div>
-        <h1 class="app-name">Gen Z Dict</h1>
+        <h1 class="app-name">Gen Z Dict - Trust </h1>
     </div>
 
     <!-- Main App -->
@@ -21,12 +292,965 @@
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search rizz, gyatt, skibidi...">
-        </div>
+           
+        </div> <button id="sort-toggle" data-sort="asc">A-Z ↑</button>
         <div id="word-list">
             <!-- Words will be inserted here by JavaScript -->
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script >// GEN Z DICTIONARY DATASET
+const genzDictionary = [
+    {
+                word: "Rizz",
+                meaning: "Charisma, especially in flirting. Short for 'charisma'.",
+                example: "Bro has unlimited rizz - got her number in 2 minutes flat.",
+                emojis: ["😂", "👑", "💀"]
+            },
+            {
+                word: "Gyatt",
+                meaning: "Exclamation about someone's curvy physique (originated from 'god damn').",
+                example: "GYATT! Did you see her new gym fit?",
+                emojis: ["🍑", "😳", "🔥"]
+            },
+            {
+                word: "Skibidi/Hits the Skibidi",
+                meaning: "Nonsense term from viral meme, now means anything chaotic.",
+                example: "This group chat is skibidi af right now./The group project hit the skibidi when no one did their part",
+                emojis: ["🤪", "🚽", "🎭"]
+            },
+            {
+                word: "Sigma",
+                meaning: "A lone wolf who succeeds without validation (contrast to 'alpha').",
+                example: "He's such a sigma - built his business with zero help.",
+                emojis: ["🐺", "💼", "🧊"]
+            },
+{
+    word: "Glazing",
+    meaning: "Over-complimenting someone excessively.",
+    example: "Stop glazing the teacher for better grades, it's embarrassing.",
+    emojis: ["🍩", "👅", "🛑"]
+},
+{
+    word: "Fanumbrained",
+    meaning: "Acting impulsive like streamer Fanum (especially about food).",
+    example: "I was fanumbrained and ate all the snacks before the movie.",
+    emojis: ["🍗", "🧠", "💨"]
+},
+{
+    word: "Ohio",
+    meaning: "Something bizarre or trashy (from 'Only in Ohio' memes).",
+    example: "Bro tried to microwave metal - this is Ohio behavior.",
+    emojis: ["🤡", "🚮", "❓"]
+},
+{
+    word: "NPC",
+    meaning: "Someone who mindlessly follows trends (like video game characters).",
+    example: "He's such an NPC - only wears what's trending on TikTok.",
+    emojis: ["🤖", "👔", "🔄"]
+},
+{
+    word: "Bussin",
+    meaning: "Extremely good (usually about food).",
+    example: "This birria tacos are bussin fr!",
+    emojis: ["🍔", "👌", "💯"]
+},
+{
+    word: "Luh",
+    meaning: "Short for 'little' or term of endearment.",
+    example: "She's my luh bestie - we've been tight since middle school.",
+    emojis: ["🩷", "👯", "🔐"]
+},
+{
+    word: "Mewing",
+    meaning: "Tongue posture trend supposed to define jawline.",
+    example: "He won't stop mewing in all his selfies - it's getting weird.",
+    emojis: ["👅", "🦷", "🧊"]
+},
+{
+    word: "Erm",
+    meaning: "Sarcastic reaction to something cringe (often with 😐 emoji).",
+    example: "'I can out-rizz anyone here'... Erm.",
+    emojis: ["😐", "🙄", "💤"]
+},
+{
+    word: "Edge",
+    meaning: "To narrowly avoid something (often danger or embarrassment).",
+    example: "I edged failing math by 0.2 points!",
+    emojis: ["🧗", "😅", "✂️"]
+},
+
+{
+    word: "Ate",
+    meaning: "To do something exceptionally well (left no crumbs).",
+    example: "She ate that presentation - perfect score!",
+    emojis: ["🍽️", "👑", "🔥"]
+},
+{
+    word: "Delulu",
+    meaning: "Delusional, especially about relationships.",
+    example: "Thinking he'll text back after 3 months? Delulu.",
+    emojis: ["🤡", "💭", "💔"]
+},
+{
+    word: "Ick",
+    meaning: "Sudden feeling of disgust toward someone.",
+    example: "He showed me his toe collection - immediate ick.",
+    emojis: ["🤢", "🚩", "🏃"]
+},
+
+{
+    word: "Situation-ship",
+    meaning: "A romantic relationship without labels.",
+    example: "We're not dating, just in a situationship.",
+    emojis: ["💑", "❓", "🚢"]
+},
+{
+    word: "Zoomer",
+    meaning: "Term for Gen Z (born ~1997-2012).",
+    example: "As a zoomer, I can't function without my AirPods.",
+    emojis: ["🎧", "📱", "👶"]
+},
+{
+    word: "Fanum Tax",
+    meaning: "When someone takes your food (from streamer Fanum).",
+    example: "My fries got hit with the Fanum Tax - gone in 2 seconds.",
+    emojis: ["🍟", "🧛", "💸"]
+},
+{
+    word: "Cheugy",
+    meaning: "Something outdated or trying too hard to be trendy.",
+    example: "Those 'Live Laugh Love' signs are so cheugy now.",
+    emojis: ["👵", "🦋", "💀"]
+},
+{
+    word: "Slay",
+    meaning: "To do something exceptionally well or look amazing.",
+    example: "You slayed that presentation!",
+    emojis: ["👑", "✨", "💅"]
+},
+{
+    word: "Periodt",
+    meaning: "Emphatic agreement or ending a statement definitively.",
+    example: "We're the best class, periodt!",
+    emojis: ["🛑", "‼️", "💯"]
+},
+{
+    word: "Sus",
+    meaning: "Suspicious or shady behavior.",
+    example: "Why is he looking at my test? That's sus.",
+    emojis: ["🕵️", "🤔", "🚨"]
+},
+{
+    word: "Bet",
+    meaning: "Agreement or confirmation (short for 'you bet').",
+    example: "We meeting at 8? Bet.",
+    emojis: ["👍", "🤝", "💰"]
+},
+{
+    word: "Cap",
+    meaning: "Lie or false statement (no cap = truth).",
+    example: "You got a 100 on the test? Cap!",
+    emojis: ["🧢", "🤥", "🚫"]
+},
+{
+    word: "Finsta",
+    meaning: "Fake Instagram account for close friends.",
+    example: "I only post silly stuff on my finsta.",
+    emojis: ["📸", "🤫", "👯"]
+},
+{
+    word: "Clout",
+    meaning: "Social influence or popularity.",
+    example: "She's only dating him for clout.",
+    emojis: ["👁️", "📈", "🌟"]
+},
+{
+    word: "Ghosted",
+    meaning: "When someone suddenly stops all communication.",
+    example: "We had 3 dates then he ghosted me.",
+    emojis: ["👻", "📵", "💔"]
+},
+{
+    word: "Flex",
+    meaning: "To show off or boast.",
+    example: "Stop flexing your new iPhone!",
+    emojis: ["💪", "🤑", "📱"]
+},
+{
+    word: "Gucci",
+    meaning: "Good, cool, or alright.",
+    example: "Don't worry about it, we're gucci.",
+    emojis: ["👌", "🛍️", "✅"]
+},
+{
+    word: "Lit",
+    meaning: "Exciting, amazing, or turned up.",
+    example: "This party is lit!",
+    emojis: ["🔥", "🎉", "😎"]
+},
+{
+    word: "Salty",
+    meaning: "Being upset or bitter about something.",
+    example: "Why are you so salty about losing?",
+    emojis: ["🧂", "😠", "🍼"]
+},
+{
+    word: "Shook",
+    meaning: "Extremely surprised or shocked.",
+    example: "I'm shook - did you see that ending?!",
+    emojis: ["😱", "🙀", "💥"]
+},
+{
+    word: "Snatched",
+    meaning: "Looking extremely good or on point.",
+    example: "Your makeup is snatched today!",
+    emojis: ["👄", "✂️", "💃"]
+},
+{
+    word: "Tea",
+    meaning: "Gossip or juicy information.",
+    example: "Spill the tea about what happened!",
+    emojis: ["☕", "👂", "🗣️"]
+},
+{
+    word: "Thirsty",
+    meaning: "Desperate for attention or validation.",
+    example: "He's so thirsty, liking all her old pics.",
+    emojis: ["🥤", "😅", "🏜️"]
+},
+{
+    word: "Vibe",
+    meaning: "General atmosphere or feeling.",
+    example: "I'm not feeling the vibe here.",
+    emojis: ["🎶", "🌊", "✨"]
+},
+{
+    word: "Woke",
+    meaning: "Being socially aware or enlightened.",
+    example: "That documentary about climate change got me woke.",
+    emojis: ["👁️", "✊", "🌎"]
+},
+
+{
+    word: "Boujee",
+    meaning: "High-class or luxurious (from 'bourgeoisie').",
+    example: "She's so boujee—only drinks oat milk lattes.",
+    emojis: ["🍷", "💎", "👑"]
+},
+{
+    word: "Drip",
+    meaning: "Stylish clothing or accessories.",
+    example: "Check out his new sneakers—that's some serious drip!",
+    emojis: ["👟", "💧", "🔥"]
+},
+{
+    word: "FOMO",
+    meaning: "Fear Of Missing Out (anxiety about social events).",
+    example: "I got FOMO seeing their party pics on Insta.",
+    emojis: ["😟", "📱", "🎉"]
+},
+{
+    word: "GOAT",
+    meaning: "Greatest Of All Time (used for praise).",
+    example: "LeBron is the GOAT of basketball, no debate.",
+    emojis: ["🐐", "🏆", "👑"]
+},
+{
+    word: "Hits Different",
+    meaning: "Feels unusually good or nostalgic.",
+    example: "This 2016 playlist hits different after graduation.",
+    emojis: ["🎵", "😌", "🕰️"]
+},
+{
+    word: "IYKYK",
+    meaning: "If You Know, You Know (inside knowledge).",
+    example: "That cafeteria pizza... IYKYK.",
+    emojis: ["🤫", "👀", "🔒"]
+},
+{
+    word: "Jawn",
+    meaning: "Versatile Philly slang for any object/person/place.",
+    example: "Pass me that jawn over there.",
+    emojis: ["🤲", "❓", "🏙️"]
+},
+{
+    word: "Kiki",
+    meaning: "A fun, gossip-filled hangout.",
+    example: "We had a kiki and spilled all the tea.",
+    emojis: ["🍵", "💃", "🗣️"]
+},
+{
+    word: "Mid",
+    meaning: "Average or mediocre (not good or bad).",
+    example: "This album is mid—skip track 5 though.",
+    emojis: ["😐", "📉", "5️⃣"]
+},
+{
+    word: "Oomf",
+    meaning: "Short for 'one of my followers/friends' (from Twitter).",
+    example: "Oomf posted the wildest tweet last night.",
+    emojis: ["👥", "🐦", "😬"]
+},
+{
+    word: "POV",
+    meaning: "Point Of View (used in memes/storytelling).",
+    example: "POV: You're the last chip in the bag.",
+    emojis: ["🎥", "👁️", "🍟"]
+},
+
+{
+    word: "Simp",
+    meaning: "Someone who obsessively chases affection.",
+    example: "He simps so hard for her—it's embarrassing.",
+    emojis: ["😍", "🦮", "💸"]
+},
+{
+    word: "Stan",
+    meaning: "Die-hard fan (from Eminem's song 'Stan').",
+    example: "I stan Olivia Rodrigo—her lyrics are too real.",
+    emojis: ["🎤", "❤️", "🏃"]
+},
+{
+    word: "TFW",
+    meaning: "That Feeling When (meme format).",
+    example: "TFW you forget your charger at 1% battery.",
+    emojis: ["😫", "📉", "🔋"]
+},
+{
+    word: "Unbothered",
+    meaning: "Not caring about drama or opinions.",
+    example: "She blocked him and stayed unbothered.",
+    emojis: ["😌", "☕", "🚶"]
+},
+{
+    word: "V",
+    meaning: "Short for 'very' (often sarcastic).",
+    example: "This homework is v fun... said no one ever.",
+    emojis: ["✌️", "😒", "📚"]
+},
+{
+    word: "W",
+    meaning: "Win (opposite of 'L' for loss).",
+    example: "Got tickets to the concert? Big W!",
+    emojis: ["🏆", "✅", "🎫"]
+},
+{
+    word: "X",
+    meaning: "Same as 'W' but edgier (from 'X games').",
+    example: "You aced the test? X!",
+    emojis: ["❌", "🛹", "😎"]
+},
+{
+    word: "Zesty",
+    meaning: "Flamboyant or extra (often about guys).",
+    example: "His walk is zesty—he knows what he's doing.",
+    emojis: ["🍋", "💃", "😏"]
+},
+{
+    word: "Beef",
+    meaning: "Conflict or drama with someone.",
+    example: "They got beef over who copied whose homework.",
+    emojis: ["🥩", "👊", "💢"]
+},
+{
+    word: "Deadass",
+    meaning: "Seriously or for real (New York origin).",
+    example: "Deadass, I saw a raccoon wearing sunglasses.",
+    emojis: ["☠️", "🧢", "🗽"]
+},
+{
+    word: "Extra",
+    meaning: "Over-the-top or dramatic behavior.",
+    example: "She brought a whole photoshoot to prom—so extra.",
+    emojis: ["🎭", "✨", "🙄"]
+},
+{
+    word: "Fam",
+    meaning: "Close friends or family (short for 'family').",
+    example: "Going to the movies with the fam tonight.",
+    emojis: ["👨‍👩‍👧‍👦", "❤️", "🍿"]
+},
+{
+    word: "Glow-up",
+    meaning: "A dramatic positive transformation.",
+    example: "His glow-up from freshman to senior year is insane.",
+    emojis: ["🦋", "💡", "📈"]
+},
+{
+    word: "Hundo P",
+    meaning: "100% true (short for 'hundred percent').",
+    example: "That test was hundo P the hardest ever.",
+    emojis: ["💯", "✅", "🔍"]
+},
+{
+    word: "Ight",
+    meaning: "Casual way to say 'alright'.",
+    example: "Ight, I'll see you after school then.",
+    emojis: ["👌", "😑", "✌️"]
+},
+{
+    word: "Janky",
+    meaning: "Poor quality or sketchy.",
+    example: "This phone charger is so janky—it only works at an angle.",
+    emojis: ["📱", "⚠️", "🔌"]
+},
+{
+    word: "Keen",
+    meaning: "Excited or eager (Australian influence).",
+    example: "I'm keen for the concert next week!",
+    emojis: ["🤩", "🎤", "🇦🇺"]
+},
+{
+    word: "Litty",
+    meaning: "Exciting or turned up (party vibe).",
+    example: "This birthday party is about to be litty!",
+    emojis: ["🎊", "🔥", "😆"]
+},
+{
+    word: "Mood",
+    meaning: "Relatable feeling or vibe.",
+    example: "That video of cats ignoring their owners? Mood.",
+    emojis: ["😌", "🎭", "🐱"]
+},
+{
+    word: "Naur",
+    meaning: "Dramatic way to say 'no' (Australian accent meme).",
+    example: "Naur, I forgot my homework again!",
+    emojis: ["🇦🇺", "😫", "🚫"]
+},
+{
+    word: "Oof",
+    meaning: "Expression of sympathy or cringe.",
+    example: "Oof, you got caught cheating on the test? Rough.",
+    emojis: ["😬", "💥", "🤕"]
+},
+{
+    word: "Pog",
+    meaning: "Awesome (from gaming term 'PogChamp').",
+    example: "You won tickets? Pog!",
+    emojis: ["🎮", "😲", "👍"]
+},
+{
+    word: "Quirky",
+    meaning: "Unconventionally weird in an appealing way.",
+    example: "Her style is so quirky—she wears socks with sandals.",
+    emojis: ["🧦", "👡", "🤪"]
+},
+{
+    word: "Sheesh",
+    meaning: "Expression of disbelief or admiration.",
+    example: "Sheesh, your new car is crazy!",
+    emojis: ["😲", "🚗", "💸"]
+},
+{
+    word: "Turnt",
+    meaning: "Wild or hyped up (party energy).",
+    example: "We got turnt at the homecoming dance.",
+    emojis: ["🎉", "🕺", "🍾"]
+},
+{
+    word: "UwU",
+    meaning: "Cute or affectionate expression (anime influence).",
+    example: "That puppy video made me go UwU.",
+    emojis: ["🐾", "🥺", "💖"]
+},
+{
+    word: "Vibing",
+    meaning: "Relaxing or enjoying the moment.",
+    example: "Just vibing to music in my room.",
+    emojis: ["🎧", "😌", "🛋️"]
+},
+{
+    word: "Wack",
+    meaning: "Lame or unfair.",
+    example: "This group project is wack—I'm doing all the work.",
+    emojis: ["👎", "😒", "📝"]
+},
+{
+    word: "Big yikes",
+    meaning: "An extreme reaction to something awkward or cringey",
+    example: "He tried to flirt with the teacher? Big yikes.",
+    emojis: ["😬", "⚠️", "🙈"]
+},
+{
+    word: "Chronically online",
+    meaning: "Someone whose personality is shaped by internet culture",
+    example: "He quoted a niche meme IRL - dude's chronically online.",
+    emojis: ["💻", "🧠", "🔄"]
+},
+{
+    word: "Do it for the plot",
+    meaning: "Justifying questionable decisions as narrative development",
+    example: "I kissed my ex... gotta do it for the plot I guess.",
+    emojis: ["📖", "🎭", "🤷"]
+},
+{
+    word: "Eggshell parenting",
+    meaning: "Walking on eggshells around sensitive Gen Z kids",
+    example: "My mom won't say no to me - total eggshell parenting.",
+    emojis: ["🥚", "👨‍👦", "😅"]
+},
+{
+    word: "Fellow kids",
+    meaning: "Cringey attempts by adults to relate to youth",
+    example: "Our principal said 'yeet' in assembly - major fellow kids energy.",
+    emojis: ["👴", "🛹", "💀"]
+},
+{
+    word: "Goblin mode",
+    meaning: "Embracing unhinged, chaotic behavior",
+    example: "Wore pajamas to school and ate dry ramen - goblin mode activated.",
+    emojis: ["👹", "🍜", "🛌"]
+},
+{
+    word: "Himbo",
+    meaning: "An attractive but unintelligent man",
+    example: "Jason is such a himbo - hot but thinks Europe is a country.",
+    emojis: ["💪", "❓", "🧠"]
+},
+{
+    word: "It's giving",
+    meaning: "Vibes or aesthetic something projects",
+    example: "Your outfit? It's giving rich aunt who vacations in Milan.",
+    emojis: ["✨", "👀", "🎁"]
+},
+{
+    word: "Keyboard smash",
+    meaning: "Random letters expressing overwhelming emotion",
+    example: "Just got Taylor Swift tickets!!! asdfghjkl!!!",
+    emojis: ["⌨️", "😱", "🎫"]
+},
+{
+    word: "Lampshading",
+    meaning: "Acknowledging something awkward to deflect criticism",
+    example: "I know this selfie is basic *laughing emoji* #lampshading",
+    emojis: ["💡", "🙈", "🛋️"]
+},
+{
+    word: "Main character energy",
+    meaning: "Carrying yourself like the protagonist of a story",
+    example: "Wore sunglasses indoors today - main character energy.",
+    emojis: ["🎬", "👓", "🌟"]
+},
+{
+    word: "Nepo baby",
+    meaning: "Someone successful due to family connections",
+    example: "Of course she got the internship - total nepo baby.",
+    emojis: ["👶", "👔", "💼"]
+},
+{
+    word: "Oh no no no",
+    meaning: "Playful reaction to something disastrous",
+    example: "Oh no no no... you wore that to picture day?",
+    emojis: ["🙅", "🚫", "📸"]
+},
+{
+    word: "Pasta brain",
+    meaning: "Forgetful or scatterbrained (like colander-drained pasta)",
+    example: "Forgot my keys again - total pasta brain today.",
+    emojis: ["🍝", "🧠", "🚪"]
+},
+{
+    word: "Quicksand situation",
+    meaning: "A problem that gets worse the more you struggle",
+    example: "My lie about grades became a quicksand situation.",
+    emojis: ["🏖️", "⚠️", "😰"]
+},
+{
+    word: "Roman Empire",
+    meaning: "Something someone thinks about surprisingly often",
+    example: "How often do I think about my middle school crush? Like my Roman Empire.",
+    emojis: ["🏛️", "🤔", "👑"]
+},
+{
+    word: "Silent walking",
+    meaning: "Taking walks without headphones or distractions",
+    example: "Tried silent walking and had 3 existential crises.",
+    emojis: ["🚶", "🔇", "🌳"]
+},
+{
+    word: "Touch grass",
+    meaning: "Telling someone to get offline and experience reality",
+    example: "You're arguing about anime power levels? Go touch grass.",
+    emojis: ["✋", "🌱", "💻"]
+},
+{
+    word: "Unalive",
+    meaning: "Euphemism for death/suicide (to avoid platform censorship)",
+    example: "That horror movie scene almost made me unalive.",
+    emojis: ["☠️", "😵", "⚠️"]
+},
+{
+    word: "Villain era",
+    meaning: "Period of prioritizing oneself over others' feelings",
+    example: "Blocked my ex on everything - it's my villain era.",
+    emojis: ["🦹", "😈", "🔪"]
+},
+{
+    word: "Bingus Mode",
+    meaning: "A state of pure chaos or absurdity",
+    example: "When the teacher left the room, the class went full Bingus Mode.",
+    emojis: ["🐱", "🌀", "🤪"]
+},
+{
+    word: "Cereal",
+    meaning: "Serious (pronounced like 'cereal' for comedic effect)",
+    example: "I'm being cereal right now - this is important!",
+    emojis: ["🥣", "😠", "✋"]
+},
+{
+    word: "Dirt Nap",
+    meaning: "A harsh rejection or failure",
+    example: "I asked her out and got put in the dirt nap.",
+    emojis: ["💀", "🛏️", "🚫"]
+},
+{
+    word: "E-boy/girl",
+    meaning: "Internet aesthetic combining emo, goth, and skate culture",
+    example: "He's got the e-boy haircut with chains and black nails.",
+    emojis: ["💻", "🖤", "👩‍🎤"]
+},
+
+{
+    word: "Glow Down",
+    meaning: "The opposite of a glow-up; getting worse over time",
+    example: "From honor roll to skipping class? That's a glow down.",
+    emojis: ["📉", "😔", "💔"]
+},
+{
+    word: "Hits Different",
+    meaning: "Something that affects you more than expected",
+    example: "Hearing our song from middle school hits different now.",
+    emojis: ["🎵", "😢", "🔄"]
+},
+{
+    word: "I'm Baby",
+    meaning: "Playfully claiming innocence or vulnerability",
+    example: "I don't know how taxes work... I'm baby!",
+    emojis: ["👶", "🥺", "❓"]
+},
+{
+    word: "Jelly",
+    meaning: "Jealous (shortened version)",
+    example: "You got front row tickets? I'm so jelly!",
+    emojis: ["🍇", "😠", "💚"]
+},
+{
+    word: "Kermit Tea",
+    meaning: "Gossip so juicy it needs dramatic presentation (from Kermit sipping meme)",
+    example: "Wait till you hear this Kermit tea about Sarah and Mark!",
+    emojis: ["🐸", "☕", "👂"]
+},
+{
+    word: "Ligma",
+    meaning: "A nonsense word used in prank jokes",
+    example: "Hey, do you know what ligma is? ...ligma balls!",
+    emojis: ["🤡", "🎭", "💀"]
+},
+{
+    word: "Moots",
+    meaning: "Short for ->mutuals<- (people you follow who follow back) ",
+    example: "Shoutout to all my moots in the comments!",
+    emojis: ["🤝", "👥", "❤️"]
+},
+{
+    word: "Noob",
+    meaning: "Someone inexperienced or bad at something (from gaming)",
+    example: "You don't know how to screenshot? Such a noob.",
+    emojis: ["🎮", "👶", "❌"]
+},
+
+{
+    word: "Pog/Poggers",
+    meaning: "Expression of excitement (from gaming)",
+    example: "We won the tournament? Poggers!",
+    emojis: ["😲", "🎮", "👍"]
+},
+{
+    word: "Qwerty",
+    meaning: "Something basic or standard (from keyboard layout)",
+    example: "His style is so qwerty - just tees and jeans.",
+    emojis: ["⌨️", "😐", "👕"]
+},
+{
+    word: "Ratio",
+    meaning: "When replies to a post outnumber likes (sign of disagreement)",
+    example: "His bad take got ratioed immediately.",
+    emojis: ["⚠️", "🔢", "😬"]
+},
+{
+word: "Balloony",
+meaning: "Overly emotional or dramatic behavior.",
+example: "She got all balloony when he didn't text back fast enough.",
+emojis: ["🎈", "😭", "🎭"]
+},
+{
+word: "Clocked",
+meaning: "To get caught or exposed.",
+example: "You got clocked using a fake ID at the bodega.",
+emojis: ["⏰", "👀", "💥"]
+},
+{
+word: "Dirtify",
+meaning: "To make something messy or chaotic.",
+example: "He dirtified the group chat with his drama.",
+emojis: ["🗑️", "🔥", "🤡"]
+},
+{
+word: "Edging (social)",
+meaning: "Leading someone on emotionally.",
+example: "She's been edging him for weeks with mixed signals.",
+emojis: ["😏", "🔄", "🚫"]
+},
+{
+word: "Kickflip",
+meaning: "To smoothly change topics or situations.",
+example: "He kickflipped the conversation when it got awkward.",
+emojis: ["🛹", "🔄", "🎯"]
+},
+{
+word: "Lame-o-rama",
+meaning: "Extremely boring.",
+example: "This lecture is straight up lame-o-rama.",
+emojis: ["😴", "📉", "🎪"]
+},
+{
+word: "Mid-off",
+meaning: "A competition where both options are bad.",
+example: "Pizza Hut vs. Domino's is the ultimate mid-off.",
+emojis: ["🍕", "😐", "⚖️"]
+},
+{
+word: "Womp Womp",
+meaning: "Mocking response to someone's misfortune.",
+example: "You got dumped? Womp womp.",
+emojis: ["🎺", "😬", "💀"]
+},
+{
+word: "Bud",
+meaning: "Term for friend or acquaintance (UK influence)",
+example: "Bud really showed up late again smh",
+emojis: ["🩸", "👬", "🇬🇧"]
+},
+{
+word: "Chirp",
+meaning: "To roast or insult someone playfully",
+example: "She chirped him so hard about his haircut",
+emojis: ["🐦", "🔥", "😂"]
+},
+{
+word: "Dank",
+meaning: "Exceptionally good (originally for memes)",
+example: "This new album is straight dank",
+emojis: ["🌿", "👍", "🎵"]
+},
+{
+word: "Glizzy",
+meaning: "Hot dog (or sometimes a gun in certain contexts)",
+example: "Dude ate 5 glizzys at the cookout",
+emojis: ["🌭", "🤏", "🔥"]
+},
+
+{
+word: "X Games Mode",
+meaning: "Extreme, risky behavior.",
+example: "He showed up to prom in X Games mode.",
+emojis: ["❌", "🛹", "🔥"]
+},
+{
+    word: "Yeet",
+    meaning: "To throw with force or express excitement",
+    example: "Yeet that trash into the bin!",
+    emojis: ["💨", "🏀", "😆"]
+},
+{
+    word: "Blehh",
+    meaning: "Playful expression of disgust or refusal",
+    example: "You want to share my fries? Blehh! Get your own!",
+    emojis: ["🤢", "🍟", "✋"]
+},
+{
+    word: "Chef's Kiss",
+    meaning: "Perfect or flawless execution",
+    example: "Her prom makeup? Absolute chef's kiss!",
+    emojis: ["👨‍🍳", "💋", "✨"]
+},
+{
+    word: "Ded",
+    meaning: "Extremely funny (short for 'dead')",
+    example: "That meme had me ded for 10 minutes straight",
+    emojis: ["☠️", "😂", "⏱️"]
+},
+{
+    word: "Eepy",
+    meaning: "Cute way to say sleepy/tired",
+    example: "It's 3pm and I'm already eepy... need a nap",
+    emojis: ["😴", "🐤", "🛏️"]
+},
+{
+    word: "Flop Era",
+    meaning: "Period where everything goes wrong",
+    example: "Failed two tests this week - definitely in my flop era",
+    emojis: ["📉", "🎭", "💔"]
+},
+{
+    word: "Gremlin Mode",
+    meaning: "Acting mischievous or chaotic",
+    example: "Ate an entire pizza at 2am - gremlin mode activated",
+    emojis: ["👹", "🍕", "🌙"]
+},
+
+{
+    word: "It's the ___ for me",
+    meaning: "Calling out a specific ridiculous thing",
+    example: "It's the cowboy hat in math class for me",
+    emojis: ["👀", "🎩", "➕"]
+},
+{
+    word: "Jabroni",
+    meaning: "A foolish person (from wrestling slang)",
+    example: "That jabroni tried to fight a parking meter",
+    emojis: ["🤼", "🤡", "👊"]
+},
+{
+    word: "Kick Rocks",
+    meaning: "Go away or get lost",
+    example: "Told my annoying cousin to kick rocks",
+    emojis: ["👟", "🪨", "🚶"]
+},
+{
+    word: "L+Ratio",
+    meaning: "Combination of 'L' (loss) and 'ratio' for ultimate insult",
+    example: "Your opinion is bad + L + ratio",
+    emojis: ["👎", "🔢", "💀"]
+},
+{
+    word: "Nebby",
+    meaning: "Nosy or intrusive (Pittsburgh slang)",
+    example: "My nebby aunt asked about my dating life",
+    emojis: ["👃", "👀", "🙄"]
+},
+{
+    word: "Oomfie",
+    meaning: "Cute version of 'oomf' (one of my followers)",
+    example: "Oomfie posted the cutest dog pics today",
+    emojis: ["🐶", "📸", "💕"]
+},
+{
+    word: "Pookie",
+    meaning: "Term of endearment for someone acting silly",
+    example: "Aww pookie, you tried to microwave soup without water?",
+    emojis: ["🐶", "🍯", "💕"]
+},
+{
+    word: "Quirked Up",
+    meaning: "Acting unusually energetic or weird",
+    example: "He's quirked up on Mountain Dew again",
+    emojis: ["⚡", "🥤", "🤪"]
+},
+{
+    word: "Rent Free",
+    meaning: "When someone/something lives in your mind without paying rent",
+    example: "My ex lives rent free in my head and it's annoying",
+    emojis: ["🏠", "🧠", "💸"]
+},
+{
+    word: "Silly Goose",
+    meaning: "Playful insult for someone being foolish",
+    example: "Forgot your keys again? You silly goose!",
+    emojis: ["🦢", "🤪", "🔑"]
+},
+
+{
+    word: "Yap Session",
+    meaning: "When someone talks excessively",
+    example: "My teacher went on a 30-minute yap session about attendance",
+    emojis: ["🗣️", "⏳", "😵"]
+} 
+].sort((a, b) => a.word.localeCompare(b.word)); // Sort alphabetically on load
+
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', () => {
+    // After 3 seconds, fade out intro
+    setTimeout(() => {
+        const intro = document.getElementById('intro');
+        intro.style.opacity = '0';
+        intro.style.visibility = 'hidden'; // Also hide from screen readers
+        
+        setTimeout(() => {
+            intro.style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.querySelector('.current-year').textContent = new Date().getFullYear();
+            renderWords(genzDictionary);
+        }, 500); // Matches the CSS transition time
+    }, 3000);
+
+    // Theme toggle functionality
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const isLightMode = document.body.classList.contains('light-mode');
+        document.getElementById('theme-toggle').textContent = isLightMode ? '🌞' : '🌙';
+    });
+
+    // Search functionality
+    document.querySelector('.search-bar input').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = genzDictionary.filter(word =>
+            word.word.toLowerCase().includes(term) ||
+            word.meaning.toLowerCase().includes(term)
+        );
+        renderWords(filtered);
+    });
+
+    // Sort toggle functionality (new addition)
+    document.getElementById('sort-toggle').addEventListener('click', () => {
+        const currentSort = document.getElementById('sort-toggle').dataset.sort || 'asc';
+        const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+        document.getElementById('sort-toggle').dataset.sort = newSort;
+        document.getElementById('sort-toggle').textContent = newSort === 'asc' ? 'A-Z ↑' : 'Z-A ↓';
+        
+        const sorted = [...genzDictionary].sort((a, b) => 
+            newSort === 'asc' 
+                ? a.word.localeCompare(b.word) 
+                : b.word.localeCompare(a.word)
+        );
+        renderWords(sorted);
+    });
+});
+
+function renderWords(words) {
+    const container = document.getElementById('word-list');
+    container.innerHTML = '';
+
+    if (words.length === 0) {
+        container.innerHTML = '<div class="no-results">No words found 😢</div>';
+        return;
+    }
+
+    words.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.innerHTML = `
+            <div class="word">${item.word}</div>
+            <div class="meaning">${item.meaning}</div>
+            <div class="example">"${item.example}"</div>
+            <div class="emoji-reactions">
+                ${item.emojis.map(emoji => `<button class="emoji-btn">${emoji}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Add emoji reaction effects
+    document.querySelectorAll('.emoji-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            this.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    });
+}</script>
 </body>
 </html>
